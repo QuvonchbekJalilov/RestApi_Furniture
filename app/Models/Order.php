@@ -19,8 +19,24 @@ class Order extends Model
         'address',
     ];
 
+    protected $casts =
+    [
+        'products' => 'array',
+        'address' => 'array',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function paymentType()
+    {
+        return $this->belongsTo(PaymentType::class);
+    }
+
+    public function deliveryMethod()
+    {
+        return $this->belongsTo(DeliveryMethod::class);
     }
 }

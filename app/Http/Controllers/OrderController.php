@@ -61,6 +61,7 @@ class OrderController extends Controller
                 "delivery_method_id" => $request->delivery_method_id,
                 "payment_type_id" => $request->payment_type_id,
                 'address' => $address,
+                'status_id' => in_array($request['payment_type_id'],[1,2]) ? 1 : 6,
                 "sum" => $sum,
                 'products' => $products,
             ]);

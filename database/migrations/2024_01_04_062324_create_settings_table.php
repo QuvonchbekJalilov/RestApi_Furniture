@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('values', function (Blueprint $table) {
+        Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->morphs('valueable');
-            $table->string('name');
+            $table->text('name');
+            $table->enum('type',['switch', 'select']);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('values');
+        Schema::dropIfExists('settings');
     }
 };

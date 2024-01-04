@@ -22,7 +22,7 @@ class Product extends Model
     
     public  $translatable = ['name','description'];
 
-
+        
     public function category(){
         return $this->belongsTo(Category::class);
     }

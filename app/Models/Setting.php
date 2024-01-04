@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\Translatable\HasTranslations;
 
-class Attribute extends Model
+class Setting extends Model
 {
-    use HasFactory;
-    protected $fillable = [
-        "name",
-    ] ;
+    use HasFactory, HasTranslations;
+
+    protected $guarded = [];
+
+    public array $translatable = ['name'];
 
     public function values(): MorphMany
     {

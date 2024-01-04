@@ -14,6 +14,8 @@ use App\Http\Controllers\StatusOrderController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\UserPaymentCardsController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\UserSettingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('change-passsword', [AuthController::class, 'changePasssword']);
 Route::get('user', [AuthController::class, 'user'])->middleware('auth:sanctum');
 
 Route::apiResources([
@@ -40,4 +43,6 @@ Route::apiResources([
     "user-payment-cards" => UserPaymentCardsController::class,
     'reviews' => ReviewController::class,
     'products.reviews' => ProductReviewController::class,
+    'settings' => SettingController::class,
+    'user-settings' => UserSettingController::class
 ]);

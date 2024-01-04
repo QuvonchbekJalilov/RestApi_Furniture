@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 
 class CategoryProductController extends Controller
 {
-    public function index(Category $category){
+    public function index(Category $category)
+    {
         return $category->products()->cursorPaginate(10);
     }
 }

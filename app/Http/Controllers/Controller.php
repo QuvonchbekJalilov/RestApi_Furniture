@@ -17,7 +17,7 @@ class Controller extends BaseController
             'data' => $data
         ]);
     }
-    public function success(string $message, $data = null)
+    public function success(string $message = null, $data = null)
     {
         return response()->json([
             'status' => 'success',

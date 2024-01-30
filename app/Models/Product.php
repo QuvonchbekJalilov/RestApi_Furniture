@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Spatie\Translatable\HasTranslations;
 
 class Product extends Model
@@ -18,12 +19,13 @@ class Product extends Model
         'name',
         'price',
         'description',
-    ] ;
-    
-    public  $translatable = ['name','description'];
+    ];
 
-        
-    public function category(){
+    public  $translatable = ['name', 'description'];
+
+
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
 
@@ -32,17 +34,42 @@ class Product extends Model
         return $this->hasMany(Stock::class);
     }
 
-    public function withStock($stockId){
+    public function withStock($stockId)
+    {
         $this->stocks = [$this->stocks()->findOrFail($stockId)];
         return $this;
     }
 
-    public function users():BelongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
+    }
+
+    public function photos()
+    {
+        return $this->morphMany(Photo::class, 'photoable');
+    }
+
+    public function discount()
+    {
+        return $this->hasOne(Discount::class);
+    }
+
+    public function getDiscount()
+    {
+        if ($this->discount) {
+            if ($this->discount->from == null && $this->discount->to == null) {
+                return $this->discount;
+            }
+
+            if (Carbon::now()->between(Carbon::parse($this->discount->from), Carbon::parse($this->discount->to))) {
+                return $this->discount;
+            }
+        }
     }
 }

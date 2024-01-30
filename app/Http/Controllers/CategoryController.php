@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -12,7 +13,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        return Category::all();
+        return $this->response(Category::all());
     }
 
 
@@ -30,7 +31,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return $category;
+        return $this->response(new CategoryResource($category));
     }
 
  

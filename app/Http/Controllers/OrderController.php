@@ -17,6 +17,7 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+        $this->authorizeResource(Order::class, 'order');
     }
 
     public function index()
@@ -39,16 +40,19 @@ class OrderController extends Controller
         foreach ($request['products'] as $requestProduct) {
             $product = Product::with('stocks')->findOrFail($requestProduct['product_id']);
             $product->quantity = $requestProduct['quantity'];
-            //dd($product->stocks);
+            
             if (
                 $product->stocks()->find($requestProduct['stock_id']) &&
                 $product->stocks()->find($requestProduct['stock_id'])->quantity >= $requestProduct['quantity']
             ) {
-                $productWithStock = $product->withStock($requestProduct['stock_id']);
-                $productResource = new ProductResource($productWithStock);
 
-                $sum += $productResource['price'];
-                $products[] = $productResource->resolve();
+
+
+
+                $productWithStock = $product->withStock($requestProduct['stock_id']);
+                $productResource = (new ProductResource($productWithStock))->resolve();
+                $sum += $productResource['discounted_price'] ?? $productResource['price'];
+                $products[] = $productResource;
             } else {
                 $requestProduct['we_have'] = $product->stocks()->find($requestProduct['stock_id'])->quantity;
                 $notFoundProducts[] =  $requestProduct;
@@ -106,6 +110,7 @@ class OrderController extends Controller
 
     public function destroy(Order $order)
     {
-        //
+        $order->delete();
+        return 1;
     }
 }

@@ -48,6 +48,8 @@ class AuthController extends Controller
 
     public function logout()
     {
+        auth()->user()->tokens()->delete();
+        return $this->success('user logged out successfully');
     }
 
     public function changePasssword(){

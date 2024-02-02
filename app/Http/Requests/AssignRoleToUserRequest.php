@@ -4,19 +4,20 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRoleRequest extends FormRequest
+class AssignRoleToUserRequest extends FormRequest
 {
-  
+    
     public function authorize()
     {
-        return auth()->user()->can('role:create');
+        return auth()->user()->can('role:assign');
     }
 
     
     public function rules()
     {
         return [
-            'name' => 'required|unique:roles,name'
+            'user_id' => 'required',
+            'role_id' => 'required',
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
+use App\Models\DeliveryMethod;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\UserAddress;
@@ -36,6 +37,7 @@ class OrderController extends Controller
         $product = [];
         $notFoundProducts = [];
         $address = UserAddress::find($request->address_id);
+        $deliveryMethod = DeliveryMethod::findOrFail($request->delivery_method_id);
 
         foreach ($request['products'] as $requestProduct) {
             $product = Product::with('stocks')->findOrFail($requestProduct['product_id']);
@@ -51,7 +53,10 @@ class OrderController extends Controller
 
                 $productWithStock = $product->withStock($requestProduct['stock_id']);
                 $productResource = (new ProductResource($productWithStock))->resolve();
+                
                 $sum += $productResource['discounted_price'] ?? $productResource['price'];
+                $sum += $productWithStock->stocks[0]->added_price;
+
                 $products[] = $productResource;
             } else {
                 $requestProduct['we_have'] = $product->stocks()->find($requestProduct['stock_id'])->quantity;
@@ -59,8 +64,9 @@ class OrderController extends Controller
             }
         }
 
-
         if ($notFoundProducts == [] && $product != [] && $sum != 0) {
+
+            $sum += $deliveryMethod->sum;
             $order = auth()->user()->orders()->create([
                 'comment' => $request->comment,
                 "delivery_method_id" => $request->delivery_method_id,
@@ -111,6 +117,6 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         $order->delete();
-        return 1;
+        return $this->success('Order deleted successfully');
     }
 }

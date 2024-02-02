@@ -13,5 +13,6 @@ class Stock extends Model
         "product_id",
         "attributes",
         "quantity",
+        
     ] ;
 }

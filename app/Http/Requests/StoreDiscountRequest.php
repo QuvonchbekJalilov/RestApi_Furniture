@@ -6,11 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDiscountRequest extends FormRequest
 {
-    
+
     public function authorize()
     {
-        // TODO add permission check
-        return true;
+        return auth()->user()->can('discount:create');
     }
 
     public function rules()

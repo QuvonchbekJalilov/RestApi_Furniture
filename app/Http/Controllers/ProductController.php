@@ -13,7 +13,9 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
+        $this->middleware('auth:sanctum');
+        $this->authorizeResource(Product::class, 'product');
+
     }
 
     public function index()
@@ -52,7 +54,6 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        Gate::authorize('product:delete');
         Storage::delete($product->photos()->pluck('path')->toArray());
         $product->photos()->delete();
         $product->delete();

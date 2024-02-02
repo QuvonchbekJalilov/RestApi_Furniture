@@ -32,7 +32,7 @@ class DeliveryMethodSeeder extends Seeder
                 'uz' => '3 kun',
                 'ru' => 'ru 3 kun',
             ],
-            'sum' => 0,
+            'sum' => 40000,
         ]);
 
         DeliveryMethod::create([
@@ -44,7 +44,7 @@ class DeliveryMethodSeeder extends Seeder
                 'uz' => '1 kun',
                 'ru' => 'ru 1 kun',
             ],
-            'sum' => 0,
+            'sum' => 80000,
         ]);
         
     }
